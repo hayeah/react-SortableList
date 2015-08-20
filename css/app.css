@@ -9,6 +9,10 @@ body {
    color: #4D4F7D;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 a {
   color: #4D4F7D;
   text-decoration: underline;
@@ -31,4 +35,21 @@ a:hover {
   bottom: 0;
 
   background-color: #000445;
+}
+
+.sortable-list {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 300px;
+}
+
+.sortable-list li {
+  width: 100%;
+  /*position: absolute;*/
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #B9BBFF;
+  color: #B9BBFF;
 }
