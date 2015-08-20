@@ -14,7 +14,7 @@ This is a generalization of the react-motion sortable list demo. It supports arb
 </SortableList>
 ```
 
-Where data is a map of string to data (i.e. 1{[string]: <T>}`). Like react-motion, we take use the inseretion order of the keys to determine the items ordering.
+Where data is a map of string to data (i.e. `{[string]: <T>}`). Like react-motion, we take use the inseretion order of the keys to determine the items ordering.
 
 # How it works
 
