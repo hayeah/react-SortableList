@@ -66,6 +66,15 @@ h1.shuffle-button:hover {
   border: 2px solid #A8A9D1;
 }
 
+.colophon {
+  font-size: 14px;
+}
+
+.colophon a {
+  font-size: 14px;
+  margin-right: 0.5em;
+}
+
 .noselect {
   -webkit-touch-callout: none;
   user-select: none;

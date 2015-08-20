@@ -275,12 +275,18 @@ const App = React.createClass({
     // console.log(items);
     return (
       <div className="container">
-        <h2>Sortable List</h2>
+        <h1>React Motion Sortable List</h1>
         <List items={items}>
           {item => <span>{item}</span>}
         </List>
 
         <h1 className="shuffle-button noselect" onClick={this.shuffle}>Shuffle</h1>
+
+        <h3 className="colophon">
+          made with <a href="https://github.com/chenglou/react-motion">react motion.</a>
+          <a href="https://github.com/hayeah/react-motion-SortableList">source.</a>
+          by <a href="https://twitter.com/hayeah">@hayeah</a>
+        </h3>
       </div>
     );
   },
