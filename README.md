@@ -17,7 +17,15 @@ ya. i think this makes sense.
 + for now, assume that data item doesn't change. (we can detect changes later).
 
 
+# sorting
 
++ placeholder are different sizes.
++ figure out where to put the placeholder depending pageY
+
++ trello's placeholder is the size of the draggable item
+
++ figure out which row cursor is at.
+  + as mousedown is dragging, we need to keep changing the row orders.
 
 # Dev Guide
 

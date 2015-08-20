@@ -2,7 +2,7 @@
 .PHONY: js bundle clean server
 .DEFAULT_GOAL := bundle
 
-BUILD=babel --optional runtime --stage 2 app.jsx --out-file build/app.js
+BUILD=babel --optional runtime --stage 2 src --out-dir build
 
 BUNDLE_ARGS=./build/app.js -t babelify -o build/bundle.js --verbose --debug
 

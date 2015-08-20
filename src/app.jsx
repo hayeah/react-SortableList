@@ -10,8 +10,6 @@ const {reorderKeys} = RMutils;
 
 const {update} = React.addons;
 
-
-// https://www.mashape.com/webknox/jokes
 const QUOTES = require("./quotes");
 
 
@@ -24,71 +22,30 @@ let Item = React.createClass({
   },
 
   render() {
-    const {children,style} = this.props;
+    const {children,style,onMouseDown} = this.props;
 
     return (
-      <li style={style} ref="li">{children}</li>
+      <li className="noselect" onMouseDown={onMouseDown} style={style} ref="li">{children}</li>
     );
   },
 
 });
 
 let List = React.createClass({
-  // getInitialState() {
-  //   const {children} = this.props;
-  //   let promises = {};
-  //   let resolvers = {};
-
-  //   children.forEach((child,id) => {
-  //     promises[id] = new Promise(resolve => {
-  //       resolvers[id] = resolve;
-  //     });
-  //   });
-
-  //   return {
-  //     layout: {
-  //       promises,
-  //       resolvers,
-  //     },
-  //   };
-  // },
-
-  // componentDidMount() {
-  //   (async () => {
-  //     const {promises} = this.state.layout;
-  //     let results = {};
-  //     (await* _.values(promises)).forEach(({id,layout}) => {
-  //       results[id] = layout;
-  //     });
-
-  //     this.setState({layout: {...this.state.layout,results}});
-  //     this.onLayoutComplete();
-  //   })();
-  // },
-
-  // onLayoutComplete() {
-  //   const {results} = this.state.layout;
-  //   console.log("onLayoutComplete");
-  //   console.log(results);
-  // },
-
-  // handleItemLayout(id,layout) {
-  //   const {resolvers} = this.state.layout;
-  //   resolvers[id]({id,layout});
-  //   // console.log(id,layout);
-  // },
-
-  // calculateLayout() {
-  //   const {results} = this.state.layout;
-  //   if(resolve == null) {
-  //     return;
-  //   }
-  // }
-
   getInitialState() {
+    const {items} = this.props;
     return {
       layouts: {},
+      items,
+      // The key of the current item we are moving.
+      movingItemKey: null,
+      movingY: null,
     };
+  },
+
+  componentWillReceiveProps(props) {
+    const {items} = props;
+    this.setState({items});
   },
 
   handleItemLayout(key,layout) {
@@ -101,37 +58,106 @@ let List = React.createClass({
         }
       };
     });
-
-    // this.setState({layouts: {
-
-    // }});
   },
 
   componentDidMount() {
-    console.log("list mounted");
+    window.addEventListener("mousemove",this.handleMouseMove);
+    window.addEventListener("mouseup",this.handleMouseUp);
+  },
+
+  handleMouseMove(e) {
+    const {movingItemKey} = this.state;
+    if(movingItemKey == null) {
+      return;
+    }
+
+    let y = this.distanceFromListTop(e.pageY);
+
+    // 1. search through items to find where to insert
+    const {items,layouts} = this.state;
+
+    let curHeight = 0;
+    let marginBottom = 10;
+
+    let rowKey;
+    let keys = Object.keys(items);
+    for(let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const layout = layouts[key];
+      curHeight = curHeight + layout.offsetHeight + marginBottom;
+      if(y < curHeight) {
+        rowKey = key;
+        break;
+      }
+    }
+    // Cursor is outside the last item. Use the last item's key.
+    if(rowKey == null) {
+      rowKey = keys[keys.length-1];
+    }
+
+    this.setState({movingY: y});
+
+    // 2. swap items if necessary
+    if(rowKey !== movingItemKey) {
+      this.setState({
+        items: reorderKeys(this.state.items,keys => {
+          let a, b;
+          keys.forEach((key,i) => {
+            // console.log("compare key",key,rowKey,movingItemKey,i);
+            if(key == rowKey) {
+              a = i
+            }
+
+            if(key == movingItemKey) {
+              b = i
+            }
+          });
+
+          const tmp = keys[a];
+          keys[a] = keys[b];
+          keys[b] = tmp;
+          return keys;
+        }),
+      });
+
+    }
+  },
+
+  distanceFromListTop(pageY) {
+    const listDom = this.refs.list.getDOMNode();
+    const y = pageY - listDom.offsetTop;
+    return y;
+  },
+
+  handleMouseUp() {
+    this.setState({
+      movingItemKey: null,
+      movingY: null,
+    });
+  },
+
+  handleMousedownOnItem(key,{pageY}) {
+    let y = this.distanceFromListTop(pageY);
+    this.setState({
+      movingItemKey: key,
+      movingY: y,
+    });
   },
 
   render() {
-    // const {jokes} = this.state;
-    // const {}
-    // const {results} = this.state.layout;
-
-    // let contentHeight;
-    // if(results) {
-    //   contentHeight = _.values(results).reduce((acc,layout) => acc + layout.offsetHeight + 10,0)
-    // }
 
     const dataRenderer = this.props.children;
     if(typeof dataRenderer != 'function') {
       throw "must be a function"
     }
 
-    const items = this.props.items;
+    const {items,movingItemKey,movingY} = this.state;
+
+    // calculate positions using layout dimensions.
     let curHeight = 0;
     let marginBottom = 10;
-    const children = Object.keys(items).map((_key) => {
-        const item = items[_key];
-        const key = `#${_key}`;
+    const children = Object.keys(items).map((key) => {
+        const item = items[key];
 
         let layout = this.state.layouts[key];
 
@@ -139,7 +165,8 @@ let List = React.createClass({
         if(layout) {
           style = {
             position: 'absolute',
-            top: curHeight,
+            top: {val: curHeight},
+            scale: {val: 1},
             opacity: 1,
           }
 
@@ -147,8 +174,23 @@ let List = React.createClass({
         } else {
           style = {
             position: 'absolute',
-            top: 0,
+            top: {val: 0},
+            scale: {val: 1},
             opacity: 1,
+          }
+        }
+
+        const isSelected = movingItemKey === key;
+
+        if(isSelected) {
+          style = {
+            ...style,
+            scale: {val: 1.1},
+            backgroundColor: '#33366A',
+            top: {
+              val: movingY - layout.offsetHeight/2,
+              config: []
+            },
           }
         }
 
@@ -156,17 +198,20 @@ let List = React.createClass({
           <Spring
             key={key}
             // defaultValue={{top: {val: 0}}}
-            endValue={{top: {val: style.top}}}
+            endValue={style}
             >
             {
-              ({top}) => {
+              ({top,scale,backgroundColor}) => {
                 let style = {
                   position: 'absolute',
                   top: 0,
-                  transform: `translate3d(0,${top.val}px,0)`,
+                  backgroundColor: backgroundColor,
+                  transform: `translate3d(0,${top.val}px,0) scale(${scale.val})`,
+                  zIndex: isSelected ? 99 : 0,
                 }
                 return (
                   <Item id={key} key={key}
+                    onMouseDown={this.handleMousedownOnItem.bind(this,key)}
                     onLayout={this.handleItemLayout}
                     style={style}>
                     {dataRenderer(item)}
@@ -185,6 +230,7 @@ let List = React.createClass({
 
     return (
       <ul className="sortable-list"
+        ref="list"
         style={{height: contentHeight}}
         >
         {children}
@@ -196,10 +242,15 @@ let List = React.createClass({
 
 const App = React.createClass({
   shuffle() {
+    console.log("shuffle yo!");
     const {items} = this.state;
 
     this.setState({
-      items: reorderKeys(items,keys => shuffle(keys)),
+      items: reorderKeys(items,keys => {
+        var keys2= shuffle(keys);
+        console.log(keys2);
+        return keys
+      }),
     });
   },
 
@@ -207,6 +258,8 @@ const App = React.createClass({
     let items = {};
 
     QUOTES.slice(0,8).forEach((quote,i) => {
+      // Javascript hash preserves insertion order except for "numeric" keys.
+      // Add a random prefix to avoid that.
       items[`@${i}`] = quote;
     });
 
@@ -220,10 +273,12 @@ const App = React.createClass({
     // console.log(items);
     return (
       <div className="container">
-        <h1 className="shuffle-button noselect" onClick={this.shuffle}>Shuffle</h1>
+        <h2>Sortable List</h2>
         <List items={items}>
           {item => <span>{item}</span>}
         </List>
+
+        <h1 className="shuffle-button noselect" onClick={this.shuffle}>Shuffle</h1>
       </div>
     );
   },
