@@ -1,0 +1,97 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+   font-weight: 300;
+   color: #4D4F7D;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: #4D4F7D;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #A8A9D1;
+}
+
+.container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: #000445;
+}
+
+.sortable-list {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 300px;
+}
+
+.sortable-list li {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #B9BBFF;
+  color: #B9BBFF;
+}
+
+h1.shuffle-button {
+  /*background: rgba(0,0,0,0.5);*/
+  padding: 5px 20px;
+  border: 2px solid #B9BBFF;
+  color: #B9BBFF;
+  border-radius: 5px;
+}
+
+h1.shuffle-button:hover {
+  color: #A8A9D1;
+  border: 2px solid #A8A9D1;
+}
+
+.colophon {
+  font-size: 14px;
+}
+
+.colophon a {
+  font-size: 14px;
+  margin-right: 0.5em;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
