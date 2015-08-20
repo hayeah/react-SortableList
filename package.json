@@ -9,11 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^3.10.1",
     "react": "^0.13.3",
     "react-motion": "^0.2.7"
-
   },
-
   "devDependencies": {
     "watchify": "^3.3.1",
     "babelify": "^6.1.3",
