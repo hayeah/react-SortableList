@@ -1,31 +1,36 @@
+[Sortable List Demo](https://hayeah.github.io/react-motion-SortableList)
 
 # Sortable List
 
+(proof-of-concept!)
 
-+ `data = {[string]: <T>}`
-+ `onReordering` get a list of keys.
-+ default ordering is the default insertion ordering of data.
+This is a generalization of the react-motion sortable list demo. It supports arbitrary number of items, and each item can have different heights.
+
+# API
 
 ```
-<SortableList onReordering={this.handleReordering} items={data}>
+<SortableList items={data}>
   {(key) => ... }
 </SortableList>
 ```
 
-ya. i think this makes sense.
+Where data is a map of string to data (i.e. 1{[string]: <T>}`). Like react-motion, we take use the inseretion order of the keys to determine the items ordering.
 
-+ for now, assume that data item doesn't change. (we can detect changes later).
+# How it works
 
+The sortable list tracks the height of its children, and lay them out vertically one after another.
 
-# sorting
+Since we know the dimensions and locations of all children, it's easy to animate them using react-motion whenever the order of the children changes.
 
-+ placeholder are different sizes.
-+ figure out where to put the placeholder depending pageY
+On drag, we look at the mouse position and iterates through the list to find an insertion point. Once we know the new ordering, the same code that does the layout animates everything into place.
 
-+ trello's placeholder is the size of the draggable item
+Ditto with shuffling items.
 
-+ figure out which row cursor is at.
-  + as mousedown is dragging, we need to keep changing the row orders.
+# TODO
+
++ Can add and remove items.
++ Trello-esque scrolling for long list of items.
++ React-Native port.
 
 # Dev Guide
 

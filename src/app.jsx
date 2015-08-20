@@ -207,6 +207,7 @@ let List = React.createClass({
                   top: 0,
                   backgroundColor: backgroundColor,
                   transform: `translate3d(0,${top.val}px,0) scale(${scale.val})`,
+                  // < Safari 8
                   '-webkit-transform': `translate3d(0,${top.val}px,0) scale(${scale.val})`,
                   zIndex: isSelected ? 99 : 0,
                 }
