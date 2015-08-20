@@ -11,7 +11,7 @@ css: build/app.css
 
 js: build/app.js
 
-bundle: build/bundle.js
+bundle: build/bundle.js build/app.css
 
 watch: build
 	($(BUILD) --watch & watchify $(BUNDLE_ARGS) & $(BUILD_CSS) --watch & wait)
