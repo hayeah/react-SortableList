@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-runtime": "^5.8.20",
     "lodash": "^3.10.1",
     "react": "^0.13.3",
     "react-motion": "^0.2.7"
