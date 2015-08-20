@@ -178,11 +178,29 @@ let List = React.createClass({
         }
 
         return (
-          <Item id={key} key={key}
-            onLayout={this.handleItemLayout}
-            style={style}>
-            {dataRenderer(item)}
-          </Item>
+          <Spring
+            key={key}
+            // defaultValue={{top: {val: 0}}}
+            endValue={{top: {val: style.top}}}
+            >
+            {
+              ({top}) => {
+                let style = {
+                  position: 'absolute',
+                  top: 0,
+                  transform: `translate3d(0,${top.val}px,0)`,
+                }
+                return (
+                  <Item id={key} key={key}
+                    onLayout={this.handleItemLayout}
+                    style={style}>
+                    {dataRenderer(item)}
+                  </Item>
+                );
+              }
+            }
+
+          </Spring>
         )
     });
 
@@ -195,27 +213,6 @@ let List = React.createClass({
         style={{height: contentHeight}}
         >
         {children}
-        {/*
-          this.props.children.map((child,id) => {
-            let style = {};
-
-            if(results != null) {
-              const layout = results[id];
-              style = {
-                position: 'absolute',
-                top: layout.offsetTop,
-              }
-            }
-
-            return (
-              <Item id={id} key={id}
-                style={style}
-                onLayout={this.handleItemLayout}>
-                {child}
-              </Item>
-            );
-          })
-        */}
       </ul>
 
     );
@@ -245,10 +242,10 @@ const App = React.createClass({
 
   render() {
     const {items} = this.state;
-    console.log(items);
+    // console.log(items);
     return (
       <div className="container">
-        <h1 onClick={this.shuffle}>Shuffle</h1>
+        <h1 className="shuffle-button" onClick={this.shuffle}>Shuffle</h1>
         <List items={items}>
           {item => <span>{item}</span>}
         </List>

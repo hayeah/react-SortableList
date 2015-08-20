@@ -47,9 +47,21 @@ a:hover {
 
 .sortable-list li {
   width: 100%;
-  /*position: absolute;*/
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #B9BBFF;
   color: #B9BBFF;
+}
+
+h1.shuffle-button {
+  /*background: rgba(0,0,0,0.5);*/
+  padding: 5px 20px;
+  border: 2px solid #B9BBFF;
+  color: #B9BBFF;
+  border-radius: 5px;
+}
+
+h1.shuffle-button:hover {
+  color: #A8A9D1;
+  border: 2px solid #A8A9D1;
 }
