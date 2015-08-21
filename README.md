@@ -16,7 +16,7 @@ This is a generalization of the react-motion sortable list demo. It supports arb
 
 Where data is a map of string to data (i.e. `{[string]: any}`). The data items can be polymorphic.
 
-Like react-motion, we take use the inseretion order of the keys to determine the items ordering.
+Like react-motion, we use the insertion order of the keys to determine the items ordering.
 
 # How it works
 
