@@ -1,4 +1,4 @@
-[Sortable List Demo](https://hayeah.github.io/react-motion-SortableList)
+[Sortable List Demo](https://hayeah.github.io/react-SortableList)
 
 # Sortable List
 
